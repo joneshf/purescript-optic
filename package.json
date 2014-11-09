@@ -1,0 +1,10 @@
+{
+  "name": "purescript-optics",
+  "version": "0.0.0",
+  "description": "Abstractions based on van Laarhoven lenses.",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-purescript": "0.0.12"
+  }
+}
