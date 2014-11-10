@@ -219,4 +219,33 @@
     use :: forall s a m. (Monad m, MonadState s m) => Getting a s a -> m a
 
 
+## Module Optic.Monad.Setter
+
+### Values
+
+    (%=) :: forall p b a m s. (Monad m, MonadState s m, Profunctor p) => Setting p s s a b -> p a b -> m Unit
+
+    (&&=) :: forall s a m. (Monad m, MonadState s m, BoolLike a) => ASetterP s a -> a -> m Unit
+
+    (*=) :: forall s a m. (Monad m, MonadState s m, Num a) => ASetterP s a -> a -> m Unit
+
+    (++=) :: forall s a m. (Monad m, MonadState s m, Semigroup a) => ASetterP s a -> a -> m Unit
+
+    (+=) :: forall s a m. (Monad m, MonadState s m, Num a) => ASetterP s a -> a -> m Unit
+
+    (-=) :: forall s a m. (Monad m, MonadState s m, Num a) => ASetterP s a -> a -> m Unit
+
+    (.=) :: forall b a m s. (Monad m, MonadState s m) => ASetter s s a b -> b -> m Unit
+
+    (//=) :: forall s a m. (Monad m, MonadState s m, Num a) => ASetterP s a -> a -> m Unit
+
+    (<>=) :: forall s a m. (Monad m, MonadState s m, Semigroup a) => ASetterP s a -> a -> m Unit
+
+    (?=) :: forall b a m s. (Monad m, MonadState s m) => ASetter s s a (Maybe b) -> b -> m Unit
+
+    (||=) :: forall s a m. (Monad m, MonadState s m, BoolLike a) => ASetterP s a -> a -> m Unit
+
+    assign :: forall b a m s. (Monad m, MonadState s m) => ASetter s s a b -> b -> m Unit
+
+
 
