@@ -22,7 +22,8 @@ module Optic.Fold
   import Data.Profunctor (dimap, lmap, rmap, Profunctor)
   import Data.Profunctor.Choice (right', Choice)
 
-  import Optic.Types (Accessing(), Getting(), OpticP())
+  import Optic.Types (Accessing(), Getting())
+  import Optic.Types.Extended (OpticP())
 
   infixl 8 ^..
   infixl 8 ^?

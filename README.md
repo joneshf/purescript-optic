@@ -162,15 +162,9 @@
     traverseOf :: forall p f s t a b. Over p f s t a b -> p a (f b) -> s -> f t
 
 
-## Module Optic.Types
+## Module Optic.Types.Extended
 
 ### Types
-
-    type APrism s t a b = Market a b a (Identity b) -> Market a b s (Identity t)
-
-    type APrismP s a = APrism s s a a
-
-    type Accessing p m s a = p a (Const m a) -> s -> Const m s
 
     type AnIso s t a b = Exchange a b a (Identity b) -> Exchange a b s (Identity t)
 
@@ -179,10 +173,6 @@
     type Equality s t a b = forall f p. p a (f b) -> p s (f t)
 
     type EqualityP s a = Equality s s a a
-
-    type Getter s a = forall f. (Contravariant f, Functor f) => (a -> f a) -> s -> f s
-
-    type Getting r s a = (a -> Const r a) -> s -> Const r s
 
     type Iso s t a b = forall p f. (Functor f, Profunctor p) => p a (f b) -> p s (f t)
 
@@ -218,25 +208,6 @@
     instance functorExchange :: Functor (Exchange a b s)
 
     instance profunctorExchange :: Profunctor (Exchange a b)
-
-
-## Module Optic.Internal.Prism
-
-### Types
-
-    data Market a b s t where
-      Market :: (b -> t) -> (s -> Either t a) -> Market
-
-    type MarketP a = Market a a
-
-
-### Type Class Instances
-
-    instance choiceMarket :: Choice (Market a b)
-
-    instance functorMarket :: Functor (Market a b s)
-
-    instance profunctorMarket :: Profunctor (Market a b)
 
 
 ## Module Optic.Monad.Getter

@@ -22,7 +22,8 @@ module Optic.Review
 
   import Optic.Internal.Setter (Settable)
   import Optic.Monad.Getter (look)
-  import Optic.Types (Getter(), Getting(), Optic(), OpticP())
+  import Optic.Types (Getter(), Getting())
+  import Optic.Types.Extended (Optic(), OpticP())
 
   import qualified Data.Bifunctor as B
 

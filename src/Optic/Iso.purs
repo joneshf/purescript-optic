@@ -11,7 +11,7 @@ module Optic.Iso
   ) where
 
   import Optic.Internal.Iso (Exchange(..))
-  import Optic.Types (AnIso(), APrismP(), Iso(), IsoP())
+  import Optic.Types.Extended (AnIso(), Iso(), IsoP())
 
   import Data.Enum (fromEnum, toEnum, Enum)
   import Data.Identity (runIdentity, Identity(..))
