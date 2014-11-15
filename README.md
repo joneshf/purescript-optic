@@ -71,6 +71,47 @@
     simply :: forall p f s a r. (OpticP p f s a -> r) -> OpticP p f s a -> r
 
 
+## Module Optic.Extended
+
+### Types
+
+    type AReview s t a b = OTE.AReview s t a b
+
+    type AReviewP t b = OTE.AReviewP t b
+
+    type AnIso s t a b = OTE.AnIso s t a b
+
+    type AnIsoP s a = OTE.AnIsoP s a
+
+    type Equality s t a b = OTE.Equality s t a b
+
+    type EqualityP s a = OTE.EqualityP s a
+
+    type Iso s t a b = OTE.Iso s t a b
+
+    type IsoP s a = OTE.IsoP s a
+
+    type LensLike f s t a b = OTE.LensLike f s t a b
+
+    type LensLikeP f s a = OTE.LensLikeP f s a
+
+    type Optic p f s t a b = OTE.Optic p f s t a b
+
+    type OpticP p f s a = OTE.OpticP p f s a
+
+    type Over p f s t a b = OTE.Over p f s t a b
+
+    type OverP p f s a = OTE.OverP p f s a
+
+    type Review s t a b = OTE.Review s t a b
+
+    type ReviewP t b = OTE.ReviewP t b
+
+    type Traversal s t a b = OTE.Traversal s t a b
+
+    type TraversalP s a = OTE.TraversalP s a
+
+
 ## Module Optic.Fold
 
 ### Values
@@ -123,26 +164,20 @@
 
 ### Types
 
-    type AReview s t a b = Optic Tagged Identity s t a b
-
-    type AReviewP t b = AReview t t b b
-
-    type Review s t a b = forall p f. (B.Bifunctor p, Profunctor p, Settable f) => Optic p f s t a b
-
-    type ReviewP t b = Review t t b b
-
 
 ### Values
 
     (##) :: forall s t a b. AReview s t a b -> b -> t
 
+    re :: forall s t a b. AReview s t a b -> Getter b t
+
+    relook :: forall m b a t s. (Monad m, MonadReader b m) => AReview s t a b -> m t
+
+    relooks :: forall m b r a t s. (Monad m, MonadReader b m) => AReview s t a b -> (t -> r) -> m r
+
     reuse :: forall m b a t s. (Monad m, MonadState b m) => AReview s t a b -> m t
 
     reuses :: forall m b r a t s. (Monad m, MonadState b m) => AReview s t a b -> (t -> r) -> m r
-
-    review :: forall m b a t s. (Monad m, MonadReader b m) => AReview s t a b -> m t
-
-    reviews :: forall m b r a t s. (Monad m, MonadReader b m) => AReview s t a b -> (t -> r) -> m r
 
     un :: forall p f s a. (Profunctor p, B.Bifunctor p, Functor f) => Getting a s a -> OpticP p f a s
 
@@ -160,39 +195,6 @@
     sequenceOf :: forall p f s t a b. LensLike f s t (f b) b -> s -> f t
 
     traverseOf :: forall p f s t a b. Over p f s t a b -> p a (f b) -> s -> f t
-
-
-## Module Optic.Types.Extended
-
-### Types
-
-    type AnIso s t a b = Exchange a b a (Identity b) -> Exchange a b s (Identity t)
-
-    type AnIsoP s a = AnIso s s a a
-
-    type Equality s t a b = forall f p. p a (f b) -> p s (f t)
-
-    type EqualityP s a = Equality s s a a
-
-    type Iso s t a b = forall p f. (Functor f, Profunctor p) => p a (f b) -> p s (f t)
-
-    type IsoP s a = Iso s s a a
-
-    type LensLike f s t a b = (a -> f b) -> s -> f t
-
-    type LensLikeP f s a = LensLike f s s a a
-
-    type Optic p f s t a b = p a (f b) -> p s (f t)
-
-    type OpticP p f s a = Optic p f s s a a
-
-    type Over p f s t a b = p a (f b) -> s -> f t
-
-    type OverP p f s a = Over p f s s a a
-
-    type Traversal s t a b = forall f. (Applicative f) => (a -> f b) -> s -> f t
-
-    type TraversalP s a = Traversal s s a a
 
 
 ## Module Optic.Internal.Iso
@@ -246,6 +248,47 @@
     (||=) :: forall s a m. (Monad m, MonadState s m, BoolLike a) => ASetterP s a -> a -> m Unit
 
     assign :: forall b a m s. (Monad m, MonadState s m) => ASetter s s a b -> b -> m Unit
+
+
+## Module Optic.Types.Extended
+
+### Types
+
+    type AReview s t a b = Optic Tagged Identity s t a b
+
+    type AReviewP t b = AReview t t b b
+
+    type AnIso s t a b = Exchange a b a (Identity b) -> Exchange a b s (Identity t)
+
+    type AnIsoP s a = AnIso s s a a
+
+    type Equality s t a b = forall f p. p a (f b) -> p s (f t)
+
+    type EqualityP s a = Equality s s a a
+
+    type Iso s t a b = forall p f. (Functor f, Profunctor p) => p a (f b) -> p s (f t)
+
+    type IsoP s a = Iso s s a a
+
+    type LensLike f s t a b = (a -> f b) -> s -> f t
+
+    type LensLikeP f s a = LensLike f s s a a
+
+    type Optic p f s t a b = p a (f b) -> p s (f t)
+
+    type OpticP p f s a = Optic p f s s a a
+
+    type Over p f s t a b = p a (f b) -> s -> f t
+
+    type OverP p f s a = Over p f s s a a
+
+    type Review s t a b = forall p f. (Bifunctor p, Profunctor p, Settable f) => Optic p f s t a b
+
+    type ReviewP t b = Review t t b b
+
+    type Traversal s t a b = forall f. (Applicative f) => (a -> f b) -> s -> f t
+
+    type TraversalP s a = Traversal s s a a
 
 
 
