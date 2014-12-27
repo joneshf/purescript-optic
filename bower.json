@@ -17,7 +17,7 @@
     "purescript-bifunctors": "~0.0.6",
     "purescript-distributive": "joneshf/purescript-distributive#~0.2.0",
     "purescript-control": "~0.2.1",
-    "purescript-lens": "split",
-    "purescript-profunctor": "joneshf/purescript-profunctors#master"
+    "purescript-profunctor": "joneshf/purescript-profunctors#master",
+    "purescript-lens": "~0.4.0"
   }
 }
