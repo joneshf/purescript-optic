@@ -1,6 +1,6 @@
 {
   "name": "purescript-optics",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Abstractions based on van Laarhoven lenses.",
   "license": "MIT",
   "dependencies": {
