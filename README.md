@@ -160,6 +160,13 @@
     withIso :: forall b r a t s. AnIso s t a b -> ((s -> a) -> (b -> t) -> r) -> r
 
 
+## Module Optic.Monad
+
+### Values
+
+    (#~) :: forall a s. s -> State s a -> s
+
+
 ## Module Optic.Review
 
 ### Types

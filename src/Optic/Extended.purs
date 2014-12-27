@@ -3,6 +3,7 @@ module Optic.Extended where
   import qualified Optic.Equality as OE
   import qualified Optic.Fold as OF
   import qualified Optic.Iso as OI
+  import qualified Optic.Monad as OM
   import qualified Optic.Monad.Getter as OMG
   import qualified Optic.Monad.Setter as OMS
   import qualified Optic.Review as OR
@@ -41,6 +42,12 @@ module Optic.Extended where
   mapping  = OI.mapping
   under    = OI.under
   withIso  = OI.withIso
+
+  -- Monad
+
+  infixl 1 #~
+
+  (#~) = OM.(#~)
 
   -- Monad.Getter
 
