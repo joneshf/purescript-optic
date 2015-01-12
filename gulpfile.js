@@ -1,7 +1,12 @@
 'use strict'
 
-var gulp       = require('gulp')
-  , purescript = require('gulp-purescript')
+var gulp        = require('gulp')
+  , bump        = require('gulp-bump')
+  , filter      = require('gulp-filter')
+  , git         = require('gulp-git')
+  , purescript  = require('gulp-purescript')
+  , runSequence = require('run-sequence')
+  , tagVersion  = require('gulp-tag-version')
   ;
 
 var paths = {
@@ -11,7 +16,11 @@ var paths = {
       'bower_components/purescript-*/src/**/*.purs.hs'
     ],
     dest: '',
-    docsDest: 'README.md'
+    docsDest: 'README.md',
+    manifests: [
+      'bower.json',
+      'package.json'
+    ]
 };
 
 var options = {
@@ -29,6 +38,39 @@ var compile = function(compiler) {
         .pipe(psc)
         .pipe(gulp.dest(paths.dest));
 };
+
+function bumpType(type) {
+    return gulp.src(paths.manifests)
+        .pipe(bump({type: type}))
+        .pipe(gulp.dest('./'));
+}
+
+gulp.task('tag', function() {
+    return gulp.src(paths.manifests)
+        .pipe(git.commit('Update versions.'))
+        .pipe(filter('bower.json'))
+        .pipe(tagVersion());
+});
+
+gulp.task('bump-major', function() {
+    return bumpType('major')
+});
+gulp.task('bump-minor', function() {
+    return bumpType('minor')
+});
+gulp.task('bump-patch', function() {
+    return bumpType('patch')
+});
+
+gulp.task('bump-tag-major', function() {
+    return runSequence('bump-major', 'tag');
+});
+gulp.task('bump-tag-minor', function() {
+    return runSequence('bump-minor', 'tag');
+});
+gulp.task('bump-tag-patch', function() {
+    return runSequence('bump-patch', 'tag');
+});
 
 gulp.task('make', function() {
     return compile(purescript.pscMake);
