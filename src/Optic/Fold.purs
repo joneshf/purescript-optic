@@ -20,7 +20,7 @@ module Optic.Fold
   import Data.Monoid.Endo (runEndo, Endo(..))
   import Data.Monoid.First (runFirst, First(..))
   import Data.Profunctor (dimap, lmap, rmap, Profunctor)
-  import Data.Profunctor.Choice (right', Choice)
+  import Data.Profunctor.Choice (right, Choice)
 
   import Optic.Types (Accessing(), Getting())
   import Optic.Types.Extended (OpticP())
@@ -29,7 +29,7 @@ module Optic.Fold
   infixl 8 ^?
 
   filtered :: forall f a p. (Applicative f, Choice p) => (a -> Boolean) -> OpticP p f a a
-  filtered p = dimap (\x -> if p x then Right x else Left x) (either pure id) <<< right'
+  filtered p = dimap (\x -> if p x then Right x else Left x) (either pure id) <<< right
 
   foldOf :: forall a s. Getting a s a -> s -> a
   foldOf asa s = getConst $ asa Const s
