@@ -92,5 +92,5 @@ module Data.Tagged where
     dimap _ f (Tagged x) = Tagged $ f x
 
   instance choiceTagged :: Choice Tagged where
-    left'  (Tagged x) = Tagged $ Left x
-    right' (Tagged x) = Tagged $ Right x
+    left  (Tagged x) = Tagged $ Left x
+    right (Tagged x) = Tagged $ Right x
