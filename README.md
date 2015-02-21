@@ -204,6 +204,21 @@
     traverseOf :: forall p f s t a b. Over p f s t a b -> p a (f b) -> s -> f t
 
 
+## Module Optic.Internal.Iso
+
+### Types
+
+    data Exchange a b s t where
+      Exchange :: (s -> a) -> (b -> t) -> Exchange a b s t
+
+
+### Type Class Instances
+
+    instance functorExchange :: Functor (Exchange a b s)
+
+    instance profunctorExchange :: Profunctor (Exchange a b)
+
+
 ## Module Optic.Monad.Getter
 
 ### Values
@@ -240,21 +255,6 @@
     (||=) :: forall s a m. (Monad m, MonadState s m, BoolLike a) => ASetterP s a -> a -> m Unit
 
     assign :: forall b a m s. (Monad m, MonadState s m) => ASetter s s a b -> b -> m Unit
-
-
-## Module Optic.Internal.Iso
-
-### Types
-
-    data Exchange a b s t where
-      Exchange :: (s -> a) -> (b -> t) -> Exchange a b s t
-
-
-### Type Class Instances
-
-    instance functorExchange :: Functor (Exchange a b s)
-
-    instance profunctorExchange :: Profunctor (Exchange a b)
 
 
 ## Module Optic.Types.Extended
