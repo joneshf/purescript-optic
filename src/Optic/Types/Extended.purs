@@ -2,7 +2,7 @@ module Optic.Types.Extended where
 
   import Data.Bifunctor (Bifunctor)
   import Data.Const (Const())
-  import Data.Contravariant (Contravariant)
+  import Data.Functor.Contravariant (Contravariant)
   import Data.Identity (Identity())
   import Data.Profunctor (Profunctor)
   import Data.Tagged (Tagged())
