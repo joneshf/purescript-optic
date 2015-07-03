@@ -9,6 +9,8 @@ module Optic.Review
   , un
   ) where
 
+  import Prelude
+
   import Control.Monad.Reader.Class (reader, MonadReader)
   import Control.Monad.State.Class (gets, MonadState)
 

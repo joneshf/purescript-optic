@@ -1,5 +1,7 @@
 module Optic.Extended where
 
+  import Prelude
+
   import qualified Optic.Equality as OE
   import qualified Optic.Fold as OF
   import qualified Optic.Iso as OI

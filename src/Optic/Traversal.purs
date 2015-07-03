@@ -5,6 +5,8 @@ module Optic.Traversal
   , traverseOf
   ) where
 
+  import Prelude
+
   import Optic.Types.Extended (LensLike(), Over(), Traversal())
 
   import Data.Traversable (traverse, Traversable)
