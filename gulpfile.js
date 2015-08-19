@@ -9,57 +9,51 @@ var gulp        = require('gulp')
   , tagVersion  = require('gulp-tag-version')
   ;
 
-var paths = {
-    src: 'src/**/*.purs',
-    bowerSrc: [
-      'bower_components/purescript-*/src/**/*.purs',
-      'bower_components/purescript-*/src/**/*.purs.hs'
-    ],
-    dest: '',
-    docsDest: 'README.md',
-    manifests: [
-      'bower.json',
-      'package.json'
-    ]
-};
-
-var options = {
-    compiler: {},
-    pscDocs: {}
-};
-
-var compile = function(compiler) {
-    var psc = compiler(options.compiler);
-    psc.on('error', function(e) {
-        console.error(e.message);
-        psc.end();
-    });
-    return gulp.src([paths.src].concat(paths.bowerSrc))
-        .pipe(psc)
-        .pipe(gulp.dest(paths.dest));
-};
-
-function bumpType(type) {
-    return gulp.src(paths.manifests)
-        .pipe(bump({type: type}))
-        .pipe(gulp.dest('./'));
-}
+var paths =
+    { src: 'src/**/*.purs'
+    , bowerFFIJs: [ 'bower_components/purescript-*/src/**/*.js'
+                  ]
+    , bowerSrc: [ 'bower_components/purescript-*/src/**/*.purs'
+                ]
+    , dest: ''
+    , docgen: { 'Data.Tagged': 'docs/Data/Tagged.md'
+              , 'Optic.Equality': 'docs/Optic/Equality.md'
+              , 'Optic.Extended': 'docs/Optic/Extended.md'
+              , 'Optic.Fold': 'docs/Optic/Fold.md'
+              , 'Optic.Internal.Iso': 'docs/Optic/Internal/Iso.md'
+              , 'Optic.Iso': 'docs/Optic/Iso.md'
+              , 'Optic.Monad': 'docs/Optic/Monad.md'
+              , 'Optic.Monad.Getter': 'docs/Optic/Monad/Getter.md'
+              , 'Optic.Monad.Setter': 'docs/Optic/Monad/Setter.md'
+              , 'Optic.Review': 'docs/Optic/Review.md'
+              , 'Optic.Traversal': 'docs/Optic/Traversal.md'
+              , 'Optic.Types.Extended': 'docs/Optic/Types/Extended.md'
+              }
+    , outputJs: 'output/**/*.js'
+    };
 
 gulp.task('tag', function() {
-    return gulp.src(paths.manifests)
+    return gulp.src(['bower.json', 'package.json'])
         .pipe(git.commit('Update versions.'))
         .pipe(filter('bower.json'))
         .pipe(tagVersion());
 });
 
+// For whatever reason, these cannot be factored out...
 gulp.task('bump-major', function() {
-    return bumpType('major')
+    return gulp.src(['bower.json', 'package.json'])
+        .pipe(bump({type: 'major'}))
+        .pipe(gulp.dest('./'));
 });
 gulp.task('bump-minor', function() {
-    return bumpType('minor')
+    return gulp.src(['bower.json', 'package.json'])
+        .pipe(bump({type: 'minor'}))
+        .pipe(gulp.dest('./'));
 });
 gulp.task('bump-patch', function() {
-    return bumpType('patch')
+    return gulp.src(['bower.json', 'package.json'])
+        .pipe(bump({type: 'patch'}))
+        .pipe(gulp.dest('./'));
 });
 
 gulp.task('bump-tag-major', function() {
@@ -72,31 +66,26 @@ gulp.task('bump-tag-patch', function() {
     return runSequence('bump-patch', 'tag');
 });
 
-gulp.task('make', function() {
-    return compile(purescript.pscMake);
-});
-
-gulp.task('browser', function() {
-    return compile(purescript.psc);
+gulp.task('psc', function() {
+    return purescript.psc({
+        src: paths.bowerSrc.concat(paths.src),
+        ffi: paths.bowerFFIJs
+    });
 });
 
 gulp.task('docs', function() {
-    var pscDocs = purescript.pscDocs(options.pscDocs);
-    pscDocs.on('error', function(e) {
-        console.error(e.message);
-        pscDocs.end();
+    return purescript.pscDocs({
+        src: paths.bowerSrc.concat(paths.src),
+        docgen: paths.docgen
     });
-    return gulp.src(paths.src)
-      .pipe(pscDocs)
-      .pipe(gulp.dest(paths.docsDest));
 });
 
-gulp.task('watch-browser', function() {
-    gulp.watch(paths.src, ['browser', 'docs']);
+gulp.task('watch', function() {
+    gulp.watch([paths.src], function() {
+      return runSequence('psc', 'docs')
+    });
 });
 
-gulp.task('watch-make', function() {
-    gulp.watch(paths.src, ['make', 'docs']);
+gulp.task('default', function() {
+  return runSequence('psc', 'docs')
 });
-
-gulp.task('default', ['make', 'docs']);
