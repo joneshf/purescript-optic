@@ -1,5 +1,7 @@
 module Optic.Monad where
 
+  import Prelude
+
   import Control.Monad.State (execState, State())
 
   infixl 1 #~

@@ -1,4 +1,6 @@
 module Optic.Types.Extended where
+              
+  import Prelude
 
   import Data.Bifunctor (Bifunctor)
   import Data.Const (Const())

@@ -11,14 +11,17 @@ module Optic.Fold
   , toListOf
   ) where
 
+  import Prelude
+
   import Data.Const (getConst, Const(..))
   import Data.Either (either, Either(..))
   import Data.Maybe (Maybe(..))
-  import Data.Monoid.All (runAll, All(..))
-  import Data.Monoid.Any (runAny, Any(..))
+  import Data.Monoid.Conj (runConj, Conj(..))
+  import Data.Monoid.Disj (runDisj, Disj(..))
   import Data.Monoid.Dual (runDual, Dual(..))
   import Data.Monoid.Endo (runEndo, Endo(..))
-  import Data.Monoid.First (runFirst, First(..))
+  import Data.Maybe.First (runFirst, First(..))
+  import Data.List (List(..), (:))
   import Data.Profunctor (dimap, lmap, rmap, Profunctor)
   import Data.Profunctor.Choice (right, Choice)
 
@@ -45,16 +48,16 @@ module Optic.Fold
   foldMapOf :: forall r a s p. (Profunctor p) => Accessing p r s a -> p a r -> s -> r
   foldMapOf prsa par = getConst `rmap` prsa (Const `rmap` par)
 
-  has :: forall a s. Getting Any s a -> s -> Boolean
-  has asa s = runAny $ foldMapOf asa (const $ Any true) s
+  has :: forall b a s. (BooleanAlgebra b) => Getting (Disj b) s a -> s -> b
+  has asa s = runDisj $ foldMapOf asa (const $ Disj top) s
 
-  hasn't :: forall a s. Getting All s a -> s -> Boolean
-  hasn't asa s = runAll $ foldMapOf asa (const $ All false) s
+  hasn't :: forall b a s. (BooleanAlgebra b) => Getting (Conj b) s a -> s -> b
+  hasn't asa s = runConj $ foldMapOf asa (const $ Conj bottom) s
 
-  toListOf :: forall a s. Getting (Endo [a]) s a -> s -> [a]
-  toListOf easa = foldrOf easa (:) []
+  toListOf :: forall a s. Getting (Endo (List a)) s a -> s -> List a
+  toListOf easa = foldrOf easa (:) Nil
 
-  (^..) :: forall a s. s -> Getting (Endo [a]) s a -> [a]
+  (^..) :: forall a s. s -> Getting (Endo (List a)) s a -> List a
   (^..) = flip toListOf
 
   (^?) :: forall a s. s -> Getting (First a) s a -> Maybe a

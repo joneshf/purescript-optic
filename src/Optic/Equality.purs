@@ -3,6 +3,8 @@ module Optic.Equality
   , simply
   ) where
 
+  import Prelude
+
   import Optic.Types.Extended (EqualityP(), OpticP())
 
   simple :: forall a. EqualityP a a

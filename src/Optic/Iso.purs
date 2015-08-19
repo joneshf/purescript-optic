@@ -10,6 +10,8 @@ module Optic.Iso
   , withIso
   ) where
 
+  import Prelude
+
   import Optic.Internal.Iso (Exchange(..))
   import Optic.Types.Extended (AnIso(), Iso(), IsoP())
 
@@ -44,7 +46,7 @@ module Optic.Iso
   under :: forall s t a b. AnIso s t a b -> (t -> s) -> b -> a
   under stab = withIso stab \s2a b2t t2s -> b2t >>> t2s >>> s2a
 
-  enum :: forall a. (Enum a, Monoid a) => IsoP Number a
+  enum :: forall a. (Enum a, Monoid a) => IsoP Int a
   enum = iso (toEnum >>> maybe mempty id) fromEnum
 
   mapping :: forall f g p s t a b. (Functor f, Functor g, Profunctor p) => AnIso s t a b -> p (f a) (f (g b)) -> p (f s) (f (g t))

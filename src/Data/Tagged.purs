@@ -1,5 +1,7 @@
 module Data.Tagged where
 
+  import Prelude
+
   import Control.Biapply (Biapply)
   import Control.Biapplicative (Biapplicative)
   import Control.Comonad (Comonad)
@@ -33,13 +35,13 @@ module Data.Tagged where
   untagSelf = unTagged
 
   instance functorTagged :: Functor (Tagged s) where
-    (<$>) f (Tagged x) = Tagged $ f x
+    map f (Tagged x) = Tagged $ f x
 
   instance applyTagged :: Apply (Tagged s) where
-    (<*>) (Tagged f) (Tagged x) = Tagged $ f x
+    apply (Tagged f) (Tagged x) = Tagged $ f x
 
   instance bindTagged :: Bind (Tagged s) where
-    (>>=) (Tagged x) f = f x
+    bind (Tagged x) f = f x
 
   instance applicativeTagged :: Applicative (Tagged s) where
     pure = Tagged
@@ -47,19 +49,19 @@ module Data.Tagged where
   instance monadTagged :: Monad (Tagged s)
 
   instance extendTagged :: Extend (Tagged s) where
-    (<<=) f x = Tagged $ f x
+    extend f x = Tagged $ f x
 
   instance comonadTagged :: Comonad (Tagged s) where
     extract = unTagged
 
   instance semigroupTagged :: (Semigroup b) => Semigroup (Tagged s b) where
-    (<>) (Tagged x) (Tagged y) = Tagged $ x <> y
+    append (Tagged x) (Tagged y) = Tagged $ x <> y
 
   instance monoidTagged :: (Monoid b) => Monoid (Tagged s b) where
     mempty = Tagged $ mempty
 
   instance semigroupoidTagged :: Semigroupoid Tagged where
-    (<<<) (Tagged x) _ = Tagged x
+    compose (Tagged x) _ = Tagged x
 
   instance foldableTagged :: Foldable (Tagged s) where
     foldr f z (Tagged x) = f x z
@@ -74,7 +76,7 @@ module Data.Tagged where
     bimap _ f (Tagged x) = Tagged $ f x
 
   instance biapplyTagged :: Biapply Tagged where
-    (<<*>>) (Tagged f) (Tagged x) = Tagged $ f x
+    biapply (Tagged f) (Tagged x) = Tagged $ f x
 
   instance biapplicativeTagged :: Biapplicative Tagged where
     bipure _ = Tagged
