@@ -6,6 +6,7 @@ module Optic.Iso
   , from
   , iso
   , mapping
+  , non
   , under
   , withIso
   ) where
@@ -17,7 +18,7 @@ module Optic.Iso
 
   import Data.Enum (fromEnum, toEnum, Enum)
   import Data.Identity (runIdentity, Identity(..))
-  import Data.Maybe (maybe, Maybe(..))
+  import Data.Maybe (fromMaybe, maybe, Maybe(..))
   import Data.Monoid (mempty, Monoid)
   import Data.Profunctor (dimap, rmap, Profunctor)
   import Data.Tuple (curry, uncurry, Tuple(..))
@@ -51,6 +52,11 @@ module Optic.Iso
 
   mapping :: forall f g p s t a b. (Functor f, Functor g, Profunctor p) => AnIso s t a b -> p (f a) (f (g b)) -> p (f s) (f (g t))
   mapping stab = withIso stab \ s2a b2t -> iso ((<$>) s2a) ((<$>) b2t)
+
+  non :: forall a. (Eq a) => a -> IsoP (Maybe a) a
+  non def = iso (fromMaybe def) go
+    where go a | a == def  = Nothing
+               | otherwise = Just a
 
   curried :: forall a b c d e f. Iso (Tuple a b -> c) (Tuple d e -> f) (a -> b -> c) (d -> e -> f)
   curried = iso curry uncurry

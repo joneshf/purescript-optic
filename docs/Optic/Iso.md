@@ -54,4 +54,10 @@ enum :: forall a. (Enum a, Monoid a) => IsoP Int a
 mapping :: forall f g p s t a b. (Functor f, Functor g, Profunctor p) => AnIso s t a b -> p (f a) (f (g b)) -> p (f s) (f (g t))
 ```
 
+#### `non`
+
+``` purescript
+non :: forall a. (Eq a) => a -> IsoP (Maybe a) a
+```
+
 
